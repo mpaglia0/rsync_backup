@@ -5,7 +5,7 @@
 # Backs up the harddrives with versioned directories.
 #
 
-source config.sh
+source $HOME/.config/rsync_backup/config.sh
 source print_vars.sh
 
 # Create TimeStamp for Backup start date
