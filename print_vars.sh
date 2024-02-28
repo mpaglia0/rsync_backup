@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+# This file can be used for information purposes but will be no more necessary in script after the config file amendment
+
 echo "Configuration Variables"
 echo -e "=======================\n"
 echo "RetentionCnt    : ${RetentionCnt}"
