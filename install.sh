@@ -4,7 +4,7 @@
 # Copyright 2024 Maurizio Paglia
 
 PGMNAME=$(basename .sh)
-PGMVER=1.0
+PGMVER=0.01
 CONFDIR=$HOME/.config/rsync_backup
 
 echo ##
