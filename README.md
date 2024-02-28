@@ -3,6 +3,8 @@ rsync based incremental backup system
 
 This is a ``rsync`` based backup system.
 
+:warning: UNDER HEAVY DEVELOPMENT. DO NOT USE!
+
 To customize the system:
 
   * Copy and rename the ``sample_config.sh`` file to ``config.sh`` and
