@@ -1,9 +1,4 @@
-#!/usr/bin/bash
-# 
-# Backup by E.Ozgur Yilmaz
-
-source $HOME/.config/rsync_backup/config.sh
-source print_vars.sh
+function remove_oldest_backup() {
 
 # Remove the oldest backup
 echo Removing the oldest backup folder
@@ -18,3 +13,5 @@ for ((i=RetentionCnt;i>5;i--)); do
 done
 
 echo Removed oldest backup folder succesfully!
+
+}

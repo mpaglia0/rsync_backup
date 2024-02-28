@@ -16,7 +16,7 @@ echo ##
 if [ ! -d $ConfDir ]; then
   mkdir -p $ConfDir
 else
-  if [ -f $ConfDir/config ]; then
+  if [ -f $ConfDir/rsync_backup.conf ]; then
     echo -e "\nA configuration files has been found found!\nMaybe $PgmName is already installed?\n"
     exit 9
   fi
@@ -30,10 +30,18 @@ InstallDir="${InstallDir:="$HOME/bin"}"
 
 test -d "$InstallDir" || mkdir -p "$InstallDir"
 
-# test if rsync executable exists
+if ! hash rsync 2>/dev/null; then
+    echo "'rsync' was not found in PATH! Cannot proceed..."; exit 9
+fi
 
 # Copy files in their proper location
 
 # Launch the config-test script
 
 (study a config file guided fill)
+
+
+# Import the configuration file
+
+ConfContent=$(cat $ConfDir/rsync_backup.conf | sed '/^#/d')
+eval "$ConfContent"

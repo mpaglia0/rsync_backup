@@ -1,9 +1,4 @@
-#!/usr/bin/bash
-# 
-# Backup by E.Ozgur Yilmaz
-
-source $HOME/.config/rsync_backup/config.sh
-source print_vars.sh
+function remove_latest_backup() {
 
 # Remove the latest backup
 echo Removing latest backup: $BackupTarget.0
@@ -16,3 +11,5 @@ for ((i=1;i<RetentionCnt;i++)); do
 done
 
 echo Removed latest backup folder succesfully!
+
+}

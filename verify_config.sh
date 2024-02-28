@@ -1,7 +1,4 @@
-#!/usr/bin/bash
-
-source $HOME/.config/rsync_backup/config.sh
-source print_vars.sh
+function verify_config() {
 
 # Create TimeStamp for Backup start date
 echo Backup Started at:   $BackupStartDate | tee $TempLocalLogFile >> $GlobalLogFile
@@ -31,3 +28,5 @@ echo Running rsync command in quiet mode
 #mv $TempLocalLogFile $LocalLogFile
 
 echo "Backup Completed"
+
+}

@@ -1,6 +1,4 @@
-#!/usr/bin/bash
-
-# This file can be used for information purposes but will be no more necessary in script after the config file amendment
+function print_vars() {
 
 echo "Configuration Variables"
 echo -e "=======================\n"
@@ -12,3 +10,5 @@ echo "BackupStartDate : ${BackupStartDate}"
 echo "GlobalLogFile   : ${GlobalLogFile}"
 echo "TempLocalLogFile: ${TempLocalLogFile}"
 echo "LocalLogFile    : ${LocalLogFile}"
+
+}

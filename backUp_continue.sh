@@ -1,12 +1,4 @@
-#!/usr/bin/bash
-# 
-# Backup by E.Ozgur Yilmaz
-# 
-# Backs up the harddrives with versioned directories.
-#
-
-source $HOME/.config/rsync_backup/config.sh
-source print_vars.sh
+function backup_continue() {
 
 # Create TimeStamp for Backup start date
 echo Backup Started at:   $BackupStartDate | tee $TempLocalLogFile >> $GlobalLogFile
@@ -23,3 +15,5 @@ echo "==================================" >> $GlobalLogFile
 mv $TempLocalLogFile $LocalLogFile
 
 echo "Backup Completed"
+
+}
