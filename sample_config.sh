@@ -4,6 +4,8 @@
 # 
 # Backs up the harddrives with versioned directories.
 
+# re-write this file making it similar to a standard conf file (i.e. variable names without 'export' command)
+
 export RetentionCnt=30
 export BackupSource=/mnt/NAS/
 export BackupDisk=/mnt/Backup
