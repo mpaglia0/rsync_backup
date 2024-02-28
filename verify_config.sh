@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-source config.sh
+source $HOME/.config/config.sh
 source print_vars.sh
 
 # Create TimeStamp for Backup start date
