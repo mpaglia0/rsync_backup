@@ -22,6 +22,14 @@ else
   fi
 fi
 
+echo -e "\nWhere copy $PgmName exec script? (default: "$HOME/bin")"
+
+read InstallDir
+
+InstallDir="${InstallDir:="$HOME/bin"}"
+
+test -d "$InstallDir" || mkdir -p "$InstallDir"
+
 # test if rsync executable exists
 
 # Copy files in their proper location
