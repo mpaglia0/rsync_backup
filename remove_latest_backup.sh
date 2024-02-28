@@ -2,7 +2,7 @@
 # 
 # Backup by E.Ozgur Yilmaz
 
-source config.sh
+source $HOME/.config/rsync_backup/config.sh
 source print_vars.sh
 
 # Remove the latest backup
