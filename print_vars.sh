@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
-echo "Config Variables"
-echo "================"
+echo "Configuration Variables"
+echo -e "=======================\n"
 echo "RetentionCnt    : ${RetentionCnt}"
 echo "BackupSource    : ${BackupSource}"
 echo "BackupDisk      : ${BackupDisk}"
