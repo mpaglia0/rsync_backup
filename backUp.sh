@@ -5,6 +5,11 @@
 # Backs up the harddrives with versioned directories.
 #
 
+# Enter here all satellites scripts as functions
+
+# Call functions with a 'case' statement
+
+
 source $HOME/.config/rsync_backup/config.sh
 source print_vars.sh
 
