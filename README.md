@@ -14,5 +14,3 @@ To customize the system:
   * Check your configuration use ``verify_config.sh``.
 
   * If everything is okay, run ``backUp.sh``.
-
-It should also work under Windows with Cygwin. But it has not been tested under Windows yet.
