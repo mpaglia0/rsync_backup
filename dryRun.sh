@@ -12,7 +12,7 @@
 # - Added support to disable suspend
 #
 
-source config.sh
+source $HOME/.config/rsync_backup/config.sh
 source print_vars.sh
 
 # link and copy and backup
