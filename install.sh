@@ -3,13 +3,11 @@
 # Installation script for rsync_backup
 # Copyright 2024 Maurizio Paglia
 
-PgmName=$(basename .sh)
-PgmVer=0.01
 ConfDir=$HOME/.config/rsync_backup
 
 echo ##
 echo ##
-echo ##  Hi! This is the installation script for $PGMNAME, v.$PGMVER
+echo ##  Hi! This is the installation script for rsync_backup
 echo ##
 echo ##
 
@@ -17,12 +15,12 @@ if [ ! -d $ConfDir ]; then
   mkdir -p $ConfDir
 else
   if [ -f $ConfDir/rsync_backup.conf ]; then
-    echo -e "\nA configuration files has been found found!\nMaybe $PgmName is already installed?\n"
+    echo -e "\nA configuration files has been found found!\nMaybe rsync_backup is already installed?\n"
     exit 9
   fi
 fi
 
-echo -e "\nWhere copy $PgmName exec script? (default: "$HOME/bin")"
+echo -e "\nWhere rsync_backup exec script has to be copied? (default: "$HOME/bin")"
 
 read InstallDir
 
