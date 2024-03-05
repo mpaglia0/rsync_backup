@@ -57,6 +57,7 @@ Options:
 -h --help:        display the present help
 
 EOF
+
 exit $NoErr
 
 }
@@ -111,6 +112,8 @@ echo Running rsync command in quiet mode
 
 echo "Backup Completed"
 
+exit $NoErr
+
 }
 
 function dry_run() {
@@ -140,6 +143,8 @@ mv $TempLocalLogFile $LocalLogFile
 
 echo "Backup Completed"
 
+exit $NoErr
+
 }
 
 function remove_latest_backup() {
@@ -155,6 +160,8 @@ for ((i=1;i<RetentionCnt;i++)); do
 done
 
 echo Removed latest backup folder succesfully!
+
+exit $NoErr
 
 }
 
@@ -173,6 +180,8 @@ for ((i=RetentionCnt;i>5;i--)); do
 done
 
 echo Removed oldest backup folder succesfully!
+
+exit $NoErr
 
 }
 
@@ -206,6 +215,8 @@ echo "==================================" >> $GlobalLogFile
 mv $TempLocalLogFile $LocalLogFile
 
 echo "Backup Completed"
+
+exit $NoErr
 
 }
 
