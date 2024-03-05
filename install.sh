@@ -29,17 +29,31 @@ InstallDir="${InstallDir:="$HOME/bin"}"
 test -d "$InstallDir" || mkdir -p "$InstallDir"
 
 if ! hash rsync 2>/dev/null; then
-    echo "'rsync' was not found in PATH! Cannot proceed..."; exit 9
+    echo -e "'rsync' was not found in PATH!\nrsync_backup is based on rsync.\nCannot proceed..."; exit 9
 fi
 
 # Copy files in their proper location
+cp backUp.sh "$InstallDir" && echo "Backup script copied in "$InstallDir""...
+cp rsync_backup.conf $ConfDir && echo "Config file copied in $ConfDir"...
+cp filter_rules $ConfDir && echo "Filter rules for rsync copied in $ConfDir"...
 
-# Launch the config-test script
+cat >&2 <<EOF
 
-(study a config file guided fill)
+rsync_backup has been installed.
 
+A 'standard' configuration file has been created in $ConfDir
+Please open it with a text editor and enter correct values for each parameter.
 
-# Import the configuration file
+In order to see the configuration parameters you can run
+rsync_backup.sh -p or rsync_backup.sh --print-vars
 
-ConfContent=$(cat $ConfDir/rsync_backup.conf | sed '/^#/d')
-eval "$ConfContent"
+In order to check the validity of your configuration file you can run
+rsync_backup.sh -v or rsync_backup.sh --verify-config
+
+In $ConfDir you will also find a <filter_rules> for rsync filled with
+file and directory names that usually do not need a backup.
+Please check it before use!
+
+Enjoy!
+
+EOF
