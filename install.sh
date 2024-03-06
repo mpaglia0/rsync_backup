@@ -1,21 +1,23 @@
 #!/bin/bash
 
 # Installation script for rsync_backup
-# Copyright 2024 Maurizio Paglia
+# Copyright (C) Maurizio Paglia
 
 ConfDir=$HOME/.config/rsync_backup
 
-echo ##
-echo ##
-echo ##  Hi! This is the installation script for rsync_backup
-echo ##
-echo ##
+echo "##"
+echo "##"
+echo "##  Hi! This is the installation script for rsync_backup"
+echo "##"
+echo "##"
 
 if [ ! -d $ConfDir ]; then
   mkdir -p $ConfDir
 else
   if [ -f $ConfDir/rsync_backup.conf ]; then
     echo -e "\nA configuration files has been found found!\nMaybe rsync_backup is already installed?\n"
+    #echo -e "If you desire to update rsync_backup please run this installer with option -u or --update\n"
+    #echo "Only the backup script will be updated. Configuration files will remain untouched!"
     exit 9
   fi
 fi
@@ -33,7 +35,7 @@ if ! hash rsync 2>/dev/null; then
 fi
 
 # Copy files in their proper location
-cp rsync_backup.sh "$InstallDir" && echo "Backup script copied in "$InstallDir""...
+cp rsync_backup.sh "$InstallDir" && echo -e "\nBackup script copied in "$InstallDir""...
 cp rsync_backup.conf $ConfDir && echo "Config file copied in $ConfDir"...
 cp filter_rules $ConfDir && echo "Filter rules for rsync copied in $ConfDir"...
 
