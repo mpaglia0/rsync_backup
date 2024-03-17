@@ -1,29 +1,30 @@
-# Enter here files, directories and/or patterns that
-# need to be excluded from backup
-
 # File Types
-Thumbs.db
-*~
-*.pyc
-*.rstexbin
-*.swatch
-*.tx
+- Thumbs.db
+- *~
+- *.pyc
+- *.rstexbin
+- *.swatch
+- *.tx
 
-# Files and Folder Patterns
-@eaDir/
-.cocatalogdb.backup*
-.mayaSwatches/
-.Trash*/
-#recycle/
-#recycle/desktop.ini
-*Previews.lrdata/
-treeinfo.wc
-autosave/
-backup/
-cache/
-Cache/
-lost+found/
-tmp/
-TMP/
-temp/
-Temp/
+
+# Files and Folder Patterns To Exlucde
+- @eaDir/
+- .cocatalogdb.backup*
+- .mayaSwatches/
+- .Trash*/
+- #recycle/
+- #recycle/desktop.ini
+- *Previews.lrdata/
+- treeinfo.wc
+- autosave/
+- backup/
+- cache/
+- Cache/
+- lost+found/
+- tmp/
+- TMP/
+- temp/
+- Temp/
+
+
+# Individual Files and Folders

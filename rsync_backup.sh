@@ -11,7 +11,7 @@
 #                    #
 ######################
 
-PgmName=$(basename .sh)
+PgmName=$(basename $0 | cut -d. -f1)
 PgmVer=0.01
 ConfDir=$HOME/.config/$PgmName/
 ConfFile=$ConfDir/rsync_backup.conf
@@ -31,7 +31,7 @@ clear
 cat >&2 <<EOF
 
 $PgmName
-Copyright (C) Maurizio Paglia
+Copyright (C) $(date +%Y) Maurizio Paglia
 
 $PgmName is a Bash script that can also be used as a backup script!
 
@@ -40,21 +40,23 @@ Call <$PgmName -p> or <$PgmName --print-vars> in order to display your own confi
 
 Usage:
 
-<$PgmName> - the script name. Without parameters NO action will be taken! #todo
+<$PgmName> - Without parameters NO action will be taken!
 
 Options:
 
--r --run:         actually execute the backup process.
+-p --print-vars		- Print variables entered in $ConfFile
+							  Only for debug purposes.
 
--c --check:       check the date of the last run and ask the user to launch the script again #todo
-                  if more than 30 days (default) were elapsed.
-                  This delay can be configured by user.
-                  This parameter can be used launching the script automatically (for example from cron) as a reminder.
+-v --verify-config	- Simulate a backup in order to verify all configuration parameters are OK.
+							  A lot of information messages will be printed on screen.
 
--nc --new-config: create your own configuration file. #todo
-                  This command needs to be launched only once (before the firs use of $PgmName)
+-d --dry-run			- Actually run a backup but write (save) nothing!
+							  Backup messages will be printed on screen.
+							  Only for debug purposes.
 
--h --help:        display the present help
+-r --run					- Run the backup.
+
+-h --help:        	- Display the present help
 
 EOF
 
