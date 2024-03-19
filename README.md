@@ -2,4 +2,8 @@
 
 This is a ``rsync`` based incremental backup system written for Linux Bash.
 
-:warning: UNDER HEAVY DEVELOPMENT. DO NOT USE!
+It is furnished with an install script that copies on your HD:
+
+- ``rsync``
+- ``rsync``
+- ``rsync``
