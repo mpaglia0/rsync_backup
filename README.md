@@ -15,4 +15,7 @@ Script options:
 - Perform a Dry Run (simulate a backup) to see if backup procedure has been configure properly (for debug purposes).
 - Manually remove oldest or latest backup
 
-Simply run ``rsync_backup.sh -h | --help`` and see all aprions available.
+Simply run ``rsync_backup.sh -h | --help`` and see all available options.
+
+:warning: ``filter_rules`` require a good knowledge of filtering options in ``rsync``. Please use ``man rsync`` or search filter options/examples on the Internet
+in order to correctly fill this configuration file.
