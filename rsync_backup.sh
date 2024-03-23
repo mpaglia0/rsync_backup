@@ -148,10 +148,10 @@ fi
 echo "The variable <RetentionCnt> indicates the quantity of backups to keep"
 echo -e "so the oldest backup will be named $BackupTarget.$RetentionCnt\n"
 
-if [ $KeepDryRunTest == "0" ]; then
+if [ $KeepDryRunTest -eq=0 ]; then
 	echo "<KeepDryRunTest> has been set to <0>"
 	echo -e "Dry run output will be displayed but not saved in a file.\n"
-elif [ $KeepDryRunTest == "1" ]; then
+elif [ $KeepDryRunTest -eq 1 ]; then
 	echo "<KeepDryRunTest> has been set to <1>"
 	echo "Dry run output will be displayed AND saved in a file."
 	echo -e "Output file is <./whatToBackup>.\n"
@@ -175,7 +175,7 @@ echo -e "Simulate rsync backup execution!\n"
 
 rsync -avuhn --progress --delete-excluded --delete --filter="merge $ConfDir/filter_rules" $BackupSource $BackupTarget.0/ | tee ./whatToBackup
 
-if [ $KeepDryRunTest == "0" ]; then
+if [ $KeepDryRunTest -eq 0 ]; then
 	rm ./whatToBackup
 fi
 
@@ -185,7 +185,7 @@ exit $NoErr
 
 }
 
-function backup_continue() { #a che cazzo serve????
+function backup_continue() { #????
 
 clear
 
