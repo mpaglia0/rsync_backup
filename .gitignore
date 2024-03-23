@@ -1,8 +1,2 @@
-.Trash-*
-Data/
-backUp.log
-LocalBackUp.log
-whatToBackup
-lost+found/
-config.sh
-filter_rules
+.git/
+.gitignore
