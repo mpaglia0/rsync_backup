@@ -23,7 +23,7 @@ fi
 
 PgmName=$(basename $0)
 ShortPgmName=$(basename $0 | cut -d. -f1)
-PgmVer=0.01
+PgmVer=$(cat $ConfDir/ver)
 ConfDir=$HOME/.config/$ShortPgmName/
 ConfFile=$ConfDir/rsync_backup.conf
 BackupStartDate=$(date +"%Y-%m-%d_%H:%M")
