@@ -137,8 +137,15 @@ fi
 
 if [ -d $BackupSource ]; then
 	echo "$BackupSource is the folder that will backed up (the backup source)."
-	echo "$BackupTarget is the name of the backup file."
-	echo -e "Since backups are incremental any new backup will be named $BackupTarget.0\n"
+	if [ -d $BackupTarget ]; then
+		echo "$BackupTarget is the name of the backup file."
+		echo -e "Since backups are incremental any new backup will be named $BackupTarget.0\n"
+	else
+		echo "$BackupTarget does not exist!"
+		echo "I can create the directory structure for you right now."
+		mkdir -pv $(dirname $BackupTarget)
+		echo "done!"
+	fi
 else
 	echo "$BackupSource does not exist!"
 	echo -e "Please fill variable <BackupSource> in configuration file.\n"
@@ -148,7 +155,7 @@ fi
 echo "The variable <RetentionCnt> indicates the quantity of backups to keep"
 echo -e "so the oldest backup will be named $BackupTarget.$RetentionCnt\n"
 
-if [ $KeepDryRunTest -eq=0 ]; then
+if [ $KeepDryRunTest -eq 0 ]; then
 	echo "<KeepDryRunTest> has been set to <0>"
 	echo -e "Dry run output will be displayed but not saved in a file.\n"
 elif [ $KeepDryRunTest -eq 1 ]; then
@@ -185,34 +192,6 @@ exit $NoErr
 
 }
 
-function backup_continue() { #????
-
-clear
-
-# Create TimeStamp for Backup start date
-
-echo Backup Started at:   $BackupStartDate | tee $TempLocalLogFile >> $GlobalLogFile
-echo Backing up $BackupSource to $BackupTarget.0
-
-# echo Running rsync command in quiet mode
-
-/usr/bin/rsync -avuh --progress --delete-excluded --delete --filter="merge $ConfDir/filter_rules" $BackupSource $BackupTarget.0/ | tee -a $TempLocalLogFile
-
-# Create TimeStamp for Backup end date
-
-echo Backup Completed at:   `date +"%Y-%m-%d_%H:%M"` | tee -a $TempLocalLogFile >> $GlobalLogFile
-echo "==================================" >> $GlobalLogFile
-
-# Move the TempLocalLogFile to LocalLogFile
-
-mv $TempLocalLogFile $LocalLogFile
-
-echo "Backup Completed"
-
-exit $NoErr
-
-}
-
 function remove_latest() { #chech echoes
 
 clear
@@ -234,7 +213,7 @@ exit $NoErr
 
 }
 
-function remove_oldest() { #check echoes
+function remove_oldest() {
 
 # Remove the oldest backup
 
@@ -255,7 +234,7 @@ exit $NoErr
 
 }
 
-function exec () { #check echoes
+function exec () {
 
 clear
 
