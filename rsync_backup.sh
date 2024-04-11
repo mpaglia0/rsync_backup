@@ -5,16 +5,6 @@
 
 # Backs up the harddrives with versioned directories.
 
-#####################################
-#                                   #
-# First of all a quick sanity check #
-#                                   #
-#####################################
-
-if ! hash rsync 2>/dev/null; then
-    echo "'rsync' was not found in PATH! Cannot proceed..."; exit $SysErr
-fi
-
 ######################
 #                    #
 # Set some variables #
@@ -23,7 +13,7 @@ fi
 
 PgmName=$(basename $0)
 ShortPgmName=$(basename $0 | cut -d. -f1)
-PgmVer=$(cat $ConfDir/ver)
+PgmVer=0.01
 ConfDir=$HOME/.config/$ShortPgmName/
 ConfFile=$ConfDir/rsync_backup.conf
 BackupStartDate=$(date +"%Y-%m-%d_%H:%M")
@@ -31,6 +21,24 @@ BackupStartDate=$(date +"%Y-%m-%d_%H:%M")
 UserErr=2
 SysErr=9
 NoErr=0
+
+#####################################
+#                                   #
+# First of all a quick sanity check #
+#                                   #
+#####################################
+
+# Check if rsync is installed and found in PATH
+if ! hash rsync 2>/dev/null; then
+    echo "'rsync' was not found in PATH! Cannot proceed..."; exit $SysErr
+fi
+
+# Check if configuration folder exists
+if [ ! -d $ConfDir ]; then
+	echo "Cannot find the configuration directory..."
+	echo "Maybe you need to check $ShortPgmName installation first!"
+	exit $SysErr
+fi
 
 # Import the configuration file
 # sed removes empty and commented lines
@@ -54,10 +62,10 @@ cat >&2 <<EOF
 $PgmName
 Copyright (C) $(date +%Y) Maurizio Paglia
 
-$PgmName is a Bash script that can also be used as a backup script!
+$PgmName is a Bash backup script.
 
 The script looks for a configuration file that have to be adjusted per your needs.
-Call <$PgmName -p> or <$PgmName --print-vars> in order to display your own config file.
+Call <$PgmName -p> or <$PgmName --print-vars> in order to display your own configuration variables.
 
 Usage:
 
@@ -68,7 +76,8 @@ Options:
 -p --print-vars      - Print variables entered in $ConfFile
                        Only for debug purposes.
 
--v --verify-config   - Simulate a backup in order to verify all configuration parameters are OK.
+-v --verify-config   - Verify all configuration parameters are OK and try to handle errors.
+							- After $ShortPgmName installation this is a suggested step!
                        A lot of information messages will be printed on screen.
 
 -d --dry-run         - Actually run a backup but write (save) nothing!
@@ -77,11 +86,11 @@ Options:
 
 -rl --remove-latest  - Removes latest backup directory.
 
--ro --remove-oldest  - Removes oldest backup directory
+-ro --remove-oldest  - Removes oldest backup directory.
 
 -e --exec            - Actually executes the backup.
 
--h --help            - Display the present help
+-h --help            - Display the present help.
 
 EOF
 
@@ -174,9 +183,21 @@ exit $NoErr
 
 }
 
+function check_media() {
+
+if [ ! -d $BackupDisk ]; then
+	echo -e "\nCannot find the backup media..."
+	echo "Maybe you need to mount it first!"
+	exit $SysErr
+fi
+
+}
+
 function dry_run() {
 
 clear
+
+check_media
 
 echo -e "Simulate rsync backup execution!\n"
 
@@ -195,6 +216,8 @@ exit $NoErr
 function remove_latest() { #chech echoes
 
 clear
+
+check_media
 
 # Remove the latest backup
 
@@ -217,6 +240,8 @@ function remove_oldest() {
 
 # Remove the oldest backup
 
+check_media
+
 echo "Removing the oldest backup folder"
 for ((i=RetentionCnt;i>5;i--)); do
     # echo Looking for $BackupTarget.$i
@@ -238,6 +263,8 @@ function exec () {
 
 clear
 
+check_media
+
 # Create TimeStamp for Backup start date
 
 echo "Backup Started at:   $BackupStartDate" | tee $TempLocalLogFile >> $GlobalLogFile
@@ -245,8 +272,10 @@ echo "Backing up $BackupSource to $BackupTarget.0"
 
 # Remove the oldest backup
 
-echo "Removing oldest backup: $BackupTarget.$RetentionCnt"
-rm -rf $BackupTarget.$RetentionCnt
+if [ -d $BackupTarget.$RetentionCnt ]; then
+	echo "Removing oldest backup: $BackupTarget.$RetentionCnt"
+	rm -rf $BackupTarget.$RetentionCnt
+fi
 
 echo "Cascade previous backup folders"
 for ((i=RetentionCnt-1;i>=0;i--)); do
@@ -284,6 +313,9 @@ exit $NoErr
 
 while true; do
 	case "$1" in
+	-t|--test)
+		find_max
+		;;
 	-p|--print-vars)
 		print_vars
 		;;
