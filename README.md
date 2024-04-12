@@ -8,6 +8,7 @@ It is furnished with an install script that copies on your HD:
 
 - ``rsync_backup.sh`` (default in ``$HOME/bin`` but you can choose a different directory)
 - ``rsync_backup.conf`` in ``$HOME/.config/rsync_backup`` this is your configuration file
+- ``ver`` a text file for versioning management. Used in installaion/updating process
 - ``filter_rules`` in ``$HOME/.config/rsync_backup`` this is a filter for ``rsync``
 
 Script options:
