@@ -4,20 +4,22 @@
 # Copyright (C) Maurizio Paglia
 
 ConfDir=$HOME/.config/rsync_backup
+PgmVer=0.7
 
-echo "##"
 echo "##"
 echo "##  Hi! This is the installation script for rsync_backup"
 echo "##"
-echo "##"
+
+function install () {
 
 if [ ! -d $ConfDir ]; then
   mkdir -p $ConfDir
 else
   if [ -f $ConfDir/rsync_backup.conf ]; then
-    echo -e "\nA configuration files has been found found!\nMaybe rsync_backup is already installed?\n"
-    #echo -e "If you desire to update rsync_backup please run this installer with option -u or --update\n"
-    #echo "Only the backup script will be updated. Configuration files will remain untouched!"
+    echo -e "\nThe configuration folder has been found!"
+    echo "This means rsync_backup is already installed."
+    echo -e "If you desire to update rsync_backup please run this installer with option -u or --update\n"
+    echo "Only the backup script will be updated. Configuration files will remain untouched!"
     exit 9
   fi
 fi
@@ -35,6 +37,7 @@ if ! hash rsync 2>/dev/null; then
 fi
 
 # Copy files in their proper location
+echo $PgmVer >> $ConfDir/ver
 cp rsync_backup.sh "$InstallDir" && echo -e "\nBackup script copied in "$InstallDir""...
 cp rsync_backup.conf $ConfDir && echo "Config file copied in $ConfDir"...
 cp filter_rules $ConfDir && echo "Filter rules for rsync copied in $ConfDir"...
@@ -59,3 +62,31 @@ Please check it before use!
 Enjoy!
 
 EOF
+
+}
+
+function update () {
+
+if [ "$(cat $ConfDir/ver)" = "$PgmVer" ]; then
+  echo -e "\nNo need to update! Installed script is already version $PgmVer"
+  exit 9
+else
+  echo -e "\nUpdating rsync_backup.sh to version $PgmVer\n"
+  InstallDir=$(dirname $(which rsync_backup.sh))
+  cp -f rsync_backup.sh "$InstallDir" && echo "Latest Version of backup script copied in "$InstallDir""...
+  echo $PgmVer >> $ConfDir/ver
+  exit 0
+fi
+
+}
+
+while true; do
+	case "$1" in
+	-u|--update)
+		update
+		;;
+    *)
+      install
+		;;
+	esac
+done
