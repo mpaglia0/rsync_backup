@@ -13,9 +13,9 @@
 
 PgmName=$(basename $0)
 ShortPgmName=$(basename $0 | cut -d. -f1)
+PgmVer=0.01
 ConfDir=$HOME/.config/$ShortPgmName/
 ConfFile=$ConfDir/rsync_backup.conf
-PgmVer=$(cat $ConfDir/ver)
 BackupStartDate=$(date +"%Y-%m-%d_%H:%M")
 
 UserErr=2
@@ -30,12 +30,12 @@ NoErr=0
 
 # Check if rsync is installed and found in PATH
 if ! hash rsync 2>/dev/null; then
-    echo "'rsync' was not found in PATH! Cannot proceed..."; exit $SysErr
+    echo "'rsync' was not found in PATH! Cannot proceed ..."; exit $SysErr
 fi
 
 # Check if configuration folder exists
 if [ ! -d $ConfDir ]; then
-	echo "Cannot find the configuration directory..."
+	echo "Cannot find the configuration directory ..."
 	echo "Maybe you need to check $ShortPgmName installation first!"
 	exit $SysErr
 fi
@@ -45,7 +45,7 @@ fi
 
 ConfParms=$(cat $ConfFile | sed -e 's/\s*$//' -e '/^$/d' -e '/^#.*$/d')
 
-eval $ConfParms
+eval "$ConfParms"
 
 #############
 #           #
@@ -53,7 +53,7 @@ eval $ConfParms
 #           #
 #############
 
-function help() {
+function help() { #OK
 
 clear
 
@@ -77,7 +77,7 @@ Options:
                        Only for debug purposes.
 
 -v --verify-config   - Verify all configuration parameters are OK and try to handle errors.
-							- After $ShortPgmName installation this is a suggested step!
+                     - After $ShortPgmName installation this is a suggested step!
                        A lot of information messages will be printed on screen.
 
 -d --dry-run         - Actually run a backup but write (save) nothing!
@@ -98,7 +98,7 @@ exit $NoErr
 
 }
 
-function print_vars() {
+function print_vars() { #OK
 
 clear
 
@@ -122,7 +122,7 @@ exit $NoErr
 
 }
 
-function verify_config() {
+function verify_config() { #OK
 
 clear
 
@@ -135,12 +135,13 @@ if [ -d $BackupDisk ]; then
 	echo "$TempLocalLogFile - This is a temp log."
 	echo "It will be used by the script and destroyed before its end."
 	echo "All operations will be actually logged in $GlobalLogFile"
-	echo -e "This file is stored, so you have to look for information here!\n"
+	echo -e "This file is stored instead, so you have to look for information here!\n"
 else
 	echo "$BackupDisk does not exist!"
 	echo "Please check this is the backup destination you desire,"
 	echo "and create it if this path is correct. Maybe you only need"
-	echo "to check and amend variable <BackupDisk> in configuration file.\n"
+	echo "to check and amend variable <BackupDisk> in configuration file"
+	echo -e "or mount the medium.\n"
 	exit $SysErr
 fi
 
@@ -152,8 +153,7 @@ if [ -d $BackupSource ]; then
 	else
 		echo "$BackupTarget does not exist!"
 		echo "I can create the directory structure for you right now."
-		mkdir -pv $(dirname $BackupTarget)
-		echo "done!"
+		mkdir -pv $(dirname $BackupTarget) && echo "Done!"
 	fi
 else
 	echo "$BackupSource does not exist!"
@@ -186,9 +186,27 @@ exit $NoErr
 function check_media() {
 
 if [ ! -d $BackupDisk ]; then
-	echo -e "\nCannot find the backup media..."
+	echo -e "\nCannot find the backup media ..."
 	echo "Maybe you need to mount it first!"
 	exit $SysErr
+fi
+
+}
+
+function find_max() {
+
+check_media
+
+BaseBackupTarget=$(dirname "$BackupTarget")
+
+MaxBck=$(ls -l "$BaseBackupTarget" | grep ^d | wc -l)
+
+if [ $MaxBck = $RetentionCnt ]; then
+	echo "Max backup quantities ($MaxBck) reached!"
+	return 0
+else
+	echo "Max session on target $BaseBackupTarget is $MaxBck"
+	return 0
 fi
 
 }
@@ -199,7 +217,7 @@ clear
 
 check_media
 
-echo -e "Simulate rsync backup execution!\n"
+echo -e "\nSimulate rsync backup execution!\n"
 
 rsync -avuhn --progress --delete-excluded --delete --filter="merge $ConfDir/filter_rules" $BackupSource $BackupTarget.0/ | tee ./whatToBackup
 
@@ -207,30 +225,32 @@ if [ $KeepDryRunTest -eq 0 ]; then
 	rm ./whatToBackup
 fi
 
-echo "Dry Run Completed!"
+echo -e "\nDry Run completed successfully!"
 
 exit $NoErr
 
 }
 
-function remove_latest() { #chech echoes
+function remove_latest() {
 
 clear
 
 check_media
 
+find_max
+
 # Remove the latest backup
+echo -e "\nRemoving latest backup: $BackupTarget.0 ... please wait ..."
+rm -rf "$BackupTarget".0 && echo "Removed latest backup folder successfully!"
 
-echo "Removing latest backup: $BackupTarget.0"
-rm -rf $BackupTarget.0
+echo "Cascade previous backup folders ..."
 
-echo "Cascade previous backup folders..."
-for ((i=1;i<RetentionCnt;i++)); do
-    echo $BackupTarget.$i \-\> $BackupTarget.$((i-1))
-    mv $BackupTarget.$i $BackupTarget.$((i-1))
+for ((i=1;i<$MaxBck;i++)); do
+    echo "$BackupTarget".$i \-\> "$BackupTarget".$((i-1))
+    mv "$BackupTarget".$i "$BackupTarget".$((i-1))
 done
 
-echo "Removed latest backup folder successfully!"
+echo "Backup structure successfully restored!"
 
 exit $NoErr
 
@@ -242,18 +262,13 @@ function remove_oldest() {
 
 check_media
 
-echo "Removing the oldest backup folder"
-for ((i=RetentionCnt;i>5;i--)); do
-    # echo Looking for $BackupTarget.$i
-    if [ -d $BackupTarget.$i ]; then
-        echo "Found $BackupTarget.$i as the oldest"
-        echo "Removing $BackupTarget.$i ..."
-        rm -Rf $BackupTarget.$i
-        break
-    fi
-done
+echo -e "\nRemoving the oldest backup folder."
 
-echo "Removed oldest backup folder successfully!"
+find_max
+
+echo "Found $BackupTarget.$MaxBck as the oldest."
+echo "Removing $BackupTarget.$MaxBck ... please wait ..."
+rm -rf $BackupTarget.$MaxBck && echo "Removed oldest backup folder successfully!"
 
 exit $NoErr
 
@@ -264,6 +279,8 @@ function exec () {
 clear
 
 check_media
+
+find_max
 
 # Create TimeStamp for Backup start date
 
@@ -277,13 +294,13 @@ if [ -d $BackupTarget.$RetentionCnt ]; then
 	rm -rf $BackupTarget.$RetentionCnt
 fi
 
-echo "Cascade previous backup folders"
-for ((i=RetentionCnt-1;i>=0;i--)); do
+echo "Cascade previous backup folders ..."
+for ((i=$MaxBck-1;i>=0;i--)); do
     echo $BackupTarget.$i \-\> $BackupTarget.$((i+1))
     mv $BackupTarget.$i $BackupTarget.$((i+1))
 done
 
-echo "Link and Copy $BackupTarget.0"
+echo "Link and Copy $BackupTarget.0 ..."
 cp -rl $BackupTarget.1 $BackupTarget.0
 
 echo "Running rsync command in quiet mode"
@@ -313,9 +330,6 @@ exit $NoErr
 
 while true; do
 	case "$1" in
-	-t|--test)
-		find_max
-		;;
 	-p|--print-vars)
 		print_vars
 		;;
