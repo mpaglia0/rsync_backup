@@ -4,7 +4,7 @@
 # Copyright (C) Maurizio Paglia
 
 ConfDir=$HOME/.config/rsync_backup
-PgmVer=0.7
+PgmVer=0.8
 
 echo "##"
 echo "##  Hi! This is the installation script for rsync_backup"
@@ -52,12 +52,12 @@ Please open it with a text editor and enter correct values for each parameter.
 In order to see the configuration parameters you can run
 rsync_backup.sh -p or rsync_backup.sh --print-vars
 
-In order to check the validity of your configuration file you can run
+In order to check the validity of your configuration file please run
 rsync_backup.sh -v or rsync_backup.sh --verify-config
 
 In $ConfDir you will also find a <filter_rules> for rsync filled with
 file and directory names that usually do not need a backup.
-Please check it before use!
+Please check it before use and adjust for your needs!
 
 Enjoy!
 

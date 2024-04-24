@@ -53,7 +53,7 @@ eval "$ConfParms"
 #           #
 #############
 
-function help() { #OK
+function help() {
 
 clear
 
@@ -98,7 +98,7 @@ exit $NoErr
 
 }
 
-function print_vars() { #OK
+function print_vars() {
 
 clear
 
@@ -122,7 +122,7 @@ exit $NoErr
 
 }
 
-function verify_config() { #OK
+function verify_config() {
 
 clear
 
