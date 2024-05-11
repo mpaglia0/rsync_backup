@@ -4,7 +4,7 @@
 # Copyright (C) Maurizio Paglia
 
 ConfDir=$HOME/.config/rsync_backup
-PgmVer=0.8
+PgmVer=0.8.1
 
 echo "##"
 echo "##  Hi! This is the installation script for rsync_backup"
