@@ -162,14 +162,8 @@ fi
 
 if [ -d $BackupSource ]; then
 	echo "$BackupSource is the folder that will backed up (the backup source)."
-	if [ -d $BackupTarget ]; then
-		echo "$BackupTarget is the name of the backup file."
-		echo -e "Since backups are incremental any new backup will be named $BackupTarget.0\n"
-	else
-		echo -en "${red}ERR:${clear} $BackupTarget does not exist!"
-		echo "I can create the directory structure for you right now."
-		mkdir -pv $(dirname $BackupTarget) && echo "Done!"
-	fi
+	echo "$BackupTarget is the name of the backup folder."
+	echo -e "Since backups are incremental any new backup will be named $BackupTarget.0\n"
 else
 	echo -en "${red}ERR:${clear} $BackupSource does not exist!"
 	echo -e "Please fill variable <BackupSource> in configuration file.\n"
@@ -181,10 +175,10 @@ echo -e "so the oldest backup will be named $BackupTarget.$RetentionCnt\n"
 
 if [ $KeepDryRunTest -eq 0 ]; then
 	echo -en "${yellow}INFO:${clear} <KeepDryRunTest> has been set to <0>"
-	echo -e "Dry run output will be displayed but not saved in a file.\n"
+	echo -e "\nDry run output will be displayed but not saved in a file.\n"
 elif [ $KeepDryRunTest -eq 1 ]; then
 	echo -en "${yellow}INFO:${clear} <KeepDryRunTest> has been set to <1>"
-	echo "Dry run output will be displayed AND saved in a file."
+	echo -e "\nDry run output will be displayed AND saved in a file."
 	echo -e "Output file is <./whatToBackup>.\n"
 else
 	echo -en "${red}ERR:${clear} <KeepDryRunTest> has a wrong parameter!"
@@ -192,7 +186,7 @@ else
 	exit $SysErr
 fi
 
-echo -en "${green}OK:${clear} your configuration seems to work correctly!"
+echo -en "${green}OK:${clear} your configuration seems to work correctly!\n"
 
 exit $NoErr
 
@@ -240,7 +234,7 @@ if [ $KeepDryRunTest -eq 0 ]; then
 	rm ./whatToBackup
 fi
 
-echo -en "\n${green}OK:${clear} Dry Run completed successfully!"
+echo -en "\n${green}OK:${clear} Dry Run completed successfully!\n"
 
 exit $NoErr
 
@@ -258,14 +252,14 @@ find_max
 echo -en "\n${yellow}INFO:${clear} Removing latest backup: $BackupTarget.0 ... please wait ..."
 rm -rf "$BackupTarget".0 && echo -en "\n${green}OK:${clear} Removed latest backup folder successfully!"
 
-echo "Cascade previous backup folders ..."
+echo -e "\nCascade previous backup folders ...\n"
 
 for ((i=1;i<$MaxBck;i++)); do
     echo "$BackupTarget".$i \-\> "$BackupTarget".$((i-1))
     mv "$BackupTarget".$i "$BackupTarget".$((i-1))
 done
 
-echo -en "\n${green}OK:${clear} Backup structure successfully restored!"
+echo -en "\n${green}OK:${clear} Backup structure successfully restored!\n"
 
 exit $NoErr
 
@@ -273,17 +267,17 @@ exit $NoErr
 
 function remove_oldest() {
 
-# Remove the oldest backup
+clear
 
 check_media
 
-echo -en "\n${yellow}INFO:${clear} Removing the oldest backup folder."
+echo -en "\n${yellow}INFO:${clear} Removing the oldest backup folder.\n"
 
 find_max
 
-echo "Found $BackupTarget.$MaxBck as the oldest."
+echo -e "\nFound $BackupTarget.$MaxBck as the oldest."
 echo "Removing $BackupTarget.$MaxBck ... please wait ..."
-rm -rf $BackupTarget.$MaxBck && echo -en "\n${green}OK:${clear} Removed oldest backup folder successfully!"
+rm -rf $BackupTarget.$MaxBck && echo -en "\n${green}OK:${clear} Removed oldest backup folder successfully!\n"
 
 exit $NoErr
 
@@ -300,7 +294,7 @@ find_max
 # Create TimeStamp for Backup start date
 
 echo "Backup Started at:   $BackupStartDate" | tee $TempLocalLogFile >> $GlobalLogFile
-echo -en "\n${info}INFO:${clear} Backing up $BackupSource to $BackupTarget.0"
+echo -en "\n${yellow}INFO:${clear} Backing up $BackupSource to $BackupTarget.0\n"
 
 # Remove the oldest backup
 
@@ -309,16 +303,16 @@ if [ -d $BackupTarget.$RetentionCnt ]; then
 	rm -rf $BackupTarget.$RetentionCnt
 fi
 
-echo -en "\n${yellow}INFO:${clear} Cascade previous backup folders ..."
+echo -en "\n${yellow}INFO:${clear} Cascade previous backup folders ...\n"
 for ((i=$MaxBck-1;i>=0;i--)); do
     echo $BackupTarget.$i \-\> $BackupTarget.$((i+1))
     mv $BackupTarget.$i $BackupTarget.$((i+1))
 done
 
-echo -en "\n${yellow}INFO:${clear} Link and Copy $BackupTarget.0 ..."
+echo -en "\n${yellow}INFO:${clear} Link and Copy $BackupTarget.0 ...\n"
 cp -rl $BackupTarget.1 $BackupTarget.0
 
-echo -en "\n${yellow}INFO:${clear} Running rsync command in quiet mode"
+echo -en "\n${yellow}INFO:${clear} Running rsync command in quiet mode\n"
 /usr/bin/rsync -avuh --progress --delete-excluded --delete --filter="merge $ConfDir/filter_rules" $BackupSource $BackupTarget.0/ | tee -a $TempLocalLogFile
 
 
@@ -331,7 +325,7 @@ echo "==================================" >> $GlobalLogFile
 
 mv $TempLocalLogFile $LocalLogFile
 
-echo -en "\n${green}OK:${clear} Backup Completed"
+echo -en "\n${green}OK:${clear} Backup Completed\n"
 
 exit $NoErr
 
