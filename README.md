@@ -1,7 +1,5 @@
 # rsync_backup
 
-:warning: under development!
-
 This is a ``rsync`` based incremental backup system written for Linux Bash.
 
 It is furnished with an install script that copies on your HD:
